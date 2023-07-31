@@ -4,8 +4,9 @@
 
 echo "Test Shell Start."
 
-# input Variable Test
+# INPUT Variable Test -> Doesn't Run Until Write Something ...
 echo "Test Name Write"
 
 read NAME
 echo "write -> $NAME"
+
