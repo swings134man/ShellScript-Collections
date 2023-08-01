@@ -63,6 +63,7 @@ while [ "$checkCommit" != "Y" ] && [ "$checkCommit" != "N" ]; do
     fi
 done
 
+echo "\n"
 # git push
 checkPush=""
 while [ "$checkPush" != "Y" ] && [ "$checkPush" != "N" ]; do
