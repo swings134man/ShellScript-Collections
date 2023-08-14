@@ -13,6 +13,7 @@
     # - net-tools
     # - vim 설치, setting
     # - git
+    # - JAVA 11 (2023-08-14 추가)
 
 
 # Logger
@@ -138,6 +139,35 @@ logger "info" "⏩️ [git] user email:"
 
 
   sleep 1
+
+echo ""
+
+#6. JAVA 11 Install & setting
+logger "info" "JAVA 11 INSTALL"
+sleep 1
+
+apt install openjdk-11-jdk
+echo ""
+
+logger "info" "Check installed Java Version"
+java -version
+slepp 2
+
+echo ""
+cat << EOF >> ~/.bashrc
+
+
+  export JAVA_HOME=$(dirname $(dirname $(readlink -f $(which java))))
+  export PATH=$PATH:$JAVA_HOME/bin
+
+EOF
+
+sleep 1
+source ~/.bashrc
+sleep 1
+
+logger "info" "JAVA_HOME"
+echo $JAVA_HOME
 
 echo ""
 logger "info" "All Setting Success"
