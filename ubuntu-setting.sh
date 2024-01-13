@@ -14,6 +14,7 @@
     # - vim 설치, setting
     # - git
     # - JAVA 11 (2023-08-14 추가)
+    # - docker
 
 
 # Logger
@@ -168,6 +169,27 @@ sleep 1
 
 logger "info" "JAVA_HOME"
 echo $JAVA_HOME
+
+
+#7. docker install
+sudo apt-get install apt-transport-https ca-certificates curl gnupg-agent software-properties-common
+
+sleep 1
+
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+
+sleep 1
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+
+sudo apt-get update
+sleep 1
+ehco ""
+
+sudo apt-get install docker-ce docker-ce-cli containerd.io
+
+ehco "docker install success!"
+ehco ""
+sudo systemctl status docker
 
 echo ""
 logger "info" "All Setting Success"
