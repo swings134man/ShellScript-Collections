@@ -2,27 +2,16 @@
 
 # Made By Lucas Kang
 # This Is For Bash Shell
-# Temp Dir Move To Tomcat Source Directory -> Prod Only
+# Temp Dir Move To Tomcat Source Directory -> Dev Only
 
 # FIXME: You need to change the directory path
-# FIXME: This is For WAS1. You Need To Fix the Code For WAS2
 
 echo "Start Deploy File Transfer"
 
-# find the war file
-
+# Find The War File
 
 # 1. Copy the file
 cp /data/smn/file/artifact.zip /var/www/smn/
-
-
-# FIXME: 2. Move To Was2 Source Directory (NEED TEST)
-# wait for transfer
-scp /data/smn/file/artifact.zip tomcat@{IP_ADDRESS}:/var/www/smn/
-# Need To Was PASSWORD
-
-echo "File Transfer To WAS2 ..."
-sleep 5
 
 
 # Check if the copy was successful
@@ -31,10 +20,8 @@ if [ $? -eq 0 ]; then
     echo "File copied successfully."
 
     # 2. Remove all files in the source directory
-    # FIXME: Path fix
-    rm -rf /data/smn/file/artifact.zip
-
-    echo "Source directory files deleted."
+    #rm -rf /data/smn/file/artifact.zip
+    #echo "Source directory files deleted."
 
     # 3. unzip the file
     # !!! If you want to unzip the file. You can use this command. !!!
