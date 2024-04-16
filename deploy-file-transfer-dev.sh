@@ -4,14 +4,17 @@
 # This Is For Bash Shell
 # Temp Dir Move To Tomcat Source Directory -> Dev Only
 
-# FIXME: You need to change the directory path
+echo "Start Deploy File Transfer - DEV"
 
-echo "Start Deploy File Transfer"
+source_dir="/var/www/smn"
 
 # Find The War File
+file_info=$(find /data/attach/smnapp-dev/deploy/ -type f -exec stat --format='%Y %n' {} \; | sort -nr | head -n 1)
+file_path=$(echo $file_info | cut -d ' ' -f 2-)
+file_name=$(echo $file_info | awk -F/ '{print $NF}')
 
 # 1. Copy the file
-cp /data/smn/file/artifact.zip /var/www/smn/
+cp $file_path $source_dir/
 
 
 # Check if the copy was successful
@@ -19,31 +22,27 @@ cp /data/smn/file/artifact.zip /var/www/smn/
 if [ $? -eq 0 ]; then
     echo "File copied successfully."
 
-    # 2. Remove all files in the source directory
-    #rm -rf /data/smn/file/artifact.zip
-    #echo "Source directory files deleted."
-
-    # 3. unzip the file
+    # 2. unzip the file
     # !!! If you want to unzip the file. You can use this command. !!!
-    unzip /var/www/smn/artifact.zip -d /var/www/smn/
+    unzip $source_dir/$file_name -d $source_dir/
 
-    # 4. war file move
+    # 3. war file move
     # if exists
-    if [ -d /var/www/smn/mobile-web ]; then
-        mv /var/www/smn/mobile-web/target/smnapp-mobile-web-prod.war /var/www/smn/mobile-web/
+    if [ -d $source_dir/mobile-web ]; then
+        mv $source_dir/mobile-web/target/smnapp-mobile-web-prod.war $source_dir/
         echo "mobile war file moved."
 
-        rm -rf /var/www/smn/mobil-web
+        rm -rf $source_dir/mobil-web
         echo "mobile war folder deleted."
     else
         echo "mobile-web directory is not found."
     fi
 
-    if [ -d /var/www/smn/cms ]; then
-        mv /var/www/smn/cms/backend/target/smnapp-cms-prod.war /var/www/smn/
+    if [ -d $source_dir/cms ]; then
+        mv $source_dir/cms/backend/target/smnapp-cms-prod.war $source_dir/
         echo "cms war file moved."
 
-        rm -rf /var/www/smn/cms
+        rm -rf $source_dir/cms
         echo "cms war folder deleted."
     else
         echo "cms directory is not found."
