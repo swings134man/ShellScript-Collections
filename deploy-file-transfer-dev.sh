@@ -25,6 +25,10 @@ if [ $? -eq 0 ]; then
     # !!! If you want to unzip the file. You can use this command. !!!
     unzip $source_dir/$file_name -d $source_dir/
 
+    # 3. Deleted Zip File
+    rm -rf $source_dir/$file_name
+    echo "zip file deleted ON /smn/~"
+
     # 3. war file move
     # if exists
     if [ -d $source_dir/mobile-web ]; then
