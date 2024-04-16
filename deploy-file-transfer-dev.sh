@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# Made By Lucas Kang
 # This Is For Bash Shell
 # Temp Dir Move To Tomcat Source Directory -> Dev Only
 
@@ -29,7 +28,7 @@ if [ $? -eq 0 ]; then
     # 3. war file move
     # if exists
     if [ -d $source_dir/mobile-web ]; then
-        mv $source_dir/mobile-web/target/smnapp-mobile-web-prod.war $source_dir/
+        mv $source_dir/mobile-web/target/smnapp-mobile-web-dev.war $source_dir/
         echo "mobile war file moved."
 
         rm -rf $source_dir/mobil-web
@@ -39,7 +38,7 @@ if [ $? -eq 0 ]; then
     fi
 
     if [ -d $source_dir/cms ]; then
-        mv $source_dir/cms/backend/target/smnapp-cms-prod.war $source_dir/
+        mv $source_dir/cms/backend/target/smnapp-cms-dev.war $source_dir/
         echo "cms war file moved."
 
         rm -rf $source_dir/cms
