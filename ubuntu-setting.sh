@@ -15,6 +15,7 @@
     # - git
     # - JAVA 11 (2023-08-14 추가)
     # - docker
+    # - Nvm - npm (2024-06-04 추가)
 
 
 # Logger
@@ -63,20 +64,20 @@ logger "info" "Ubuntu Basic Settings Start!"
 echo ""
 
 
-# 1. apt-update
+# 1. apt-update ----------------------------------------------------------------------------------------
 logger "info" "apt-get update"
 apt-get update
 
 sleep 1
 echo ""
 
-# 2. sudo install
+# 2. sudo install ----------------------------------------------------------------------------------------
 logger "info" "sudo-install"
 apt-get install sudo
 
 sleep 1
 
-# 3. kor utf8 install
+# 3. kor utf8 install ----------------------------------------------------------------------------------------
 logger "info" "kor-utf8 setting"
 
 locale-gen ko_KR.UTF-8
@@ -86,14 +87,14 @@ update-locale LANG=ko_KR.UTF-8 LC_MESSAGES=POSIX
 
 echo ""
 
-# 4. net-tools
+# 4. net-tools ----------------------------------------------------------------------------------------
 logger "info" "install net-tools"
 apt-get install net-tools
 
 echo ""
 sleep 2
 
-# 5. vim 설치 및 설정
+# 5. vim 설치 및 설정 ----------------------------------------------------------------------------------------
 logger "info" "install vim & setting"
 apt-get install vim
 
@@ -123,7 +124,7 @@ EOF
 info "info" ".vimrc File Setting Success -> /root/.vimrc"
 echo ""
 
-# 6. git 설치
+# 6. git 설치 ----------------------------------------------------------------------------------------
 apt-get install git
 
 git config --global core.precomposeunicode true
@@ -143,7 +144,7 @@ logger "info" "⏩️ [git] user email:"
 
 echo ""
 
-#6. JAVA 11 Install & setting
+#6. JAVA 11 Install & setting ----------------------------------------------------------------------------------------
 logger "info" "JAVA 11 INSTALL"
 sleep 1
 
@@ -171,7 +172,7 @@ logger "info" "JAVA_HOME"
 echo $JAVA_HOME
 
 
-#7. docker install
+#7. docker install ----------------------------------------------------------------------------------------
 sudo apt-get install apt-transport-https ca-certificates curl gnupg-agent software-properties-common
 
 sleep 1
@@ -190,6 +191,57 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io
 ehco "docker install success!"
 ehco ""
 sudo systemctl status docker
+
+# 8. Nvm - npm install ----------------------------------------------------------------------------------------
+echo "Start nvm install ..."
+
+# nvm install
+brew install nvm
+sleep 2
+
+mkdir ~/.nvm
+
+cat << EOF >> ~/.zshrc
+
+  # nvm setting
+  export NVM_DIR=~/.nvm
+  export $(brew --prefix nvm)/nvm.sh
+
+EOF
+
+sleep 1
+source ~/.zshrc
+sleep 1
+
+echo "nvm install success!"
+
+sleep 2
+
+# node install
+echo ""
+echo "node install start ..."
+
+inputVersion=""
+echo "Input node version: (version NUMBER ONLY)"
+read inputVersion
+
+# validate ONLY NUMBER filter
+inputVersion=$(echo "$inputVersion" | tr -cd '[:digit:]')
+
+nvm install $inputVersion
+
+sleep 1
+
+echo "node install success!"
+
+sleep 2
+
+# echo "nvm version: " 뒤에 nvm --version 의 결과 출력
+echo "nvm version: " $(nvm --version)
+echo "npm version: " $(npm --version)
+echo "node version: " $(node --version)
+
+# ----------------------------------------------------------------------------------------
 
 echo ""
 logger "info" "All Setting Success"
