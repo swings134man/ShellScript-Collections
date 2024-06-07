@@ -205,7 +205,7 @@ cat << EOF >> ~/.zshrc
 
   # nvm setting
   export NVM_DIR=~/.nvm
-  export $(brew --prefix nvm)/nvm.sh
+  source $(brew --prefix nvm)/nvm.sh
 
 EOF
 
