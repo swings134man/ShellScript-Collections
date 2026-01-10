@@ -15,6 +15,7 @@
     # - 시스템 설정
     # - ufw
     # - fail2ban
+    # - nginx
 
 # Need to Nginx, fail2Ban, ufw, crontab, sshd Settings
 
@@ -121,30 +122,37 @@ EOF
 
 cacheClear
 
+sudo chmod 644 /root/.vimrc
+sudo chown root:root /root/.vimrc
+
 info "info" ".vimrc File Setting Success -> /root/.vimrc"
 echo ""
 
 # 5. git 설치 ----------------------------------------------------------------------------------------
 logger "info" "install and setting git"
 
-apt-get install git
+inputYN "Would you like to install and set git?"
 
-git config --global core.precomposeunicode true
-git config --global core.quotepath false
+if [ $? -ne 1 ]; then
+    apt-get install git
 
-logger "info" "⏩️ [git] setting git global properties..."
-logger "info" "⏩️ [git] user name:"
-    read -r name
-    git config --global user.name "${name}"
+    git config --global core.precomposeunicode true
+    git config --global core.quotepath false
 
-logger "info" "⏩️ [git] user email:"
-    read -r email
-    git config --global user.email "${email}"
+    logger "info" "⏩️ [git] setting git global properties..."
+    logger "info" "⏩️ [git] user name:"
+        read -r name
+        git config --global user.name "${name}"
+
+    logger "info" "⏩️ [git] user email:"
+        read -r email
+        git config --global user.email "${email}"
 
 
-  sleep 1
+      sleep 1
 
-echo ""
+    echo ""
+fi
 
 # 6. cron ----------------------------------------------------------------------------------------
 logger "info" "install and setting cron"
@@ -168,7 +176,7 @@ ufw enable
 
 ufw allow 80
 ufw allow 443
-ufw allow Nginx Full
+ufw allow 12322
 
 cacheClear
 
@@ -181,6 +189,60 @@ systemctl start fail2ban
 # Check fail2ban status
 systemctl status fail2ban
 
+cat << EOF >> /etc/fail2ban/jail.local
+[sshd]
+enabled = true
+port = ssh
+backend = systemd
+filter = sshd
+# 최대 3번 실패시 밴
+maxretry = 3
+# 10분동안 3번 실패시 밴
+findtime = 10m
+# 1일 밴 -1 은 영구차단
+bantime = 86400
+EOF
+
+sudo chmod 644 /etc/fail2ban/jail.local
+sudo chown root:root /etc/fail2ban/jail.local
+
+sudo systemctl restart fail2ban
+
+cacheClear
+
+sudo journalctl --vacuum-size=1G
+sudo journalctl --vacuum-time=2w
+
+# 8 .etc ----------------------------------------------------------------------------------------
+logger "info" "install nginx"
+
+apt-get install nginx
+
+ufw allow Nginx Full
+
+sudo apt install certbot python3-certbot-nginx -y
+logger "info" "completed nginx & Certbot install"
+
+echo ""
+
+logger "info" "iptables setting"
+sudo iptables -I INPUT 5 -i ens3 -p tcp --dport 80 -m state --state NEW,ESTABLISHED -j ACCEPT
+sudo iptables -I INPUT 5 -i ens3 -p tcp --dport 443 -m state --state NEW,ESTABLISHED -j ACCEPT
+sudo apt install iptables-persistent -y
+sudo netfilter-persistent save
+
+logger "info" "iptables setting save completed"
+
+echo ""
+
 
 # ------------------ main ------------------
 logger "success" "Oracle Server Ubuntu Settings completed successfully."
+echo ""
+
+logger "info" "you need to setting list"
+logger "info" "- nginx"
+logger "info" "- fail2ban"
+logger "info" "- cron"
+logger "info" "- vimrc by user"
+logger "info" "- certbot"
