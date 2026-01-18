@@ -235,6 +235,12 @@ logger "info" "iptables setting save completed"
 
 echo ""
 
+journalctl --vacuum-size=1G
+journalctl --vacuum-time=2w
+logger "info" "etc setting log size Limit Completed"
+
+echo ""
+
 
 # ------------------ main ------------------
 logger "success" "Oracle Server Ubuntu Settings completed successfully."
