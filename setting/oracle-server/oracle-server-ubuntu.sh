@@ -16,6 +16,7 @@
     # - ufw
     # - fail2ban
     # - nginx
+    # - system etc setting
 
 # Need to Nginx, fail2Ban, ufw, crontab, sshd Settings
 
@@ -219,6 +220,12 @@ logger "info" "install nginx"
 apt-get install nginx
 
 ufw allow Nginx Full
+
+systemctl enable nginx
+systemctl start nginx
+
+cacheClear
+sleep 3
 
 sudo apt install certbot python3-certbot-nginx -y
 logger "info" "completed nginx & Certbot install"
